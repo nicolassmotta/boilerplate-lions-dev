@@ -14,10 +14,6 @@ const router = Router();
 // Isso evita repetir "autenticar" em cada rota.
 router.use(autenticar);
 
-// GET /api/usuarios
-// Lista usuários cadastrados.
-router.get("/", UsuarioController.listar);
-
 // GET /api/usuarios/perfil
 // Retorna os dados do usuário logado.
 router.get("/perfil", UsuarioController.perfil);

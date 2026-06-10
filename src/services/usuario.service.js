@@ -76,9 +76,17 @@ async function atualizarPerfil(idDoUsuario, dados = {}) {
   }
 
   // Se nenhum campo permitido foi enviado, não há o que atualizar.
+  // Object.keys(objeto) devolve um array com os NOMES das propriedades do objeto.
+  // Ex.: Object.keys({ nome: "Ana", senhaHash: "..." }) => ["nome", "senhaHash"]
+  // Como dadosAtualizados começa vazio ({}) e só recebe campos válidos acima,
+  // se o array de chaves tiver tamanho (length) 0 é porque nada foi preenchido.
   if (Object.keys(dadosAtualizados).length === 0) {
     throw criarErro("Envie nome e/ou senha para atualizar.", 400);
   }
+  // Forma alternativa (mais simples de ler) verificando direto os dados de entrada:
+  // if (!dados.nome && !dados.senha) {
+  //   throw criarErro("Envie nome e/ou senha para atualizar.", 400);
+  // }
 
   // Atualiza o usuário no banco.
   const usuarioAtualizado = await UsuarioRepository.atualizarPorId(idDoUsuario, dadosAtualizados);

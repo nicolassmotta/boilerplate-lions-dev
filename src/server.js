@@ -25,7 +25,4 @@ try {
 } catch (error) {
   // Se a conexão ou a inicialização falhar, mostramos o erro no terminal.
   console.error("Erro ao iniciar a aplicação:", error.message);
-
-  // Encerramos o processo com código 1 para indicar falha.
-  process.exit(1);
 }

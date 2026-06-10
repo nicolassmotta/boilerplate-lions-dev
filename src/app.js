@@ -23,14 +23,7 @@ app.use(express.json());
 
 // Rota inicial apenas para testar se a API está rodando.
 app.get("/", (req, res) => {
-  return res.status(200).json({
-    message: "Boilerplate API MVC está rodando.",
-    rotas: {
-      cadastro: "POST /api/auth/cadastro",
-      login: "POST /api/auth/login",
-      perfil: "GET /api/usuarios/perfil",
-    },
-  });
+  return res.status(200).json({message: "Boilerplate API MVC está rodando."});
 });
 
 // Todas as rotas de autenticação começam com /api/auth.

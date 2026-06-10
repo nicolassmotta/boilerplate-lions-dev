@@ -234,7 +234,7 @@ Exemplo: login em `POST /api/auth/login`.
 flowchart LR
   A[Cliente] --> B[app.js]
   B --> C[auth.routes.js]
-  C --> D[validarCampos]
+  C --> D[validarLogin]
   D --> E[auth.controller.js]
   E --> F[auth.service.js]
   F --> G[usuario.repository.js]
@@ -252,7 +252,7 @@ Passo a passo:
 | --- | --- | --- |
 | 1 | `app.js` | Recebe a requisição e encaminha para `/api/auth` |
 | 2 | `auth.routes.js` | Encontra a rota `POST /login` |
-| 3 | `validarCampos` | Confere se `email` e `senha` vieram no body |
+| 3 | `validarLogin` | Confere se `email` e `senha` vieram no body |
 | 4 | `auth.controller.js` | Lê o body e chama o service |
 | 5 | `auth.service.js` | Busca usuário, compara senha e gera token |
 | 6 | `usuario.repository.js` | Consulta o MongoDB usando o Model |
@@ -638,15 +638,15 @@ Routes definem o caminho da API.
 Em `auth.routes.js`:
 
 ```js
-router.post("/cadastro", validarCampos(["nome", "email", "senha"]), AuthController.cadastrar);
-router.post("/login", validarCampos(["email", "senha"]), AuthController.login);
+router.post("/cadastro", validarCadastro, AuthController.cadastrar);
+router.post("/login", validarLogin, AuthController.login);
 ```
 
-Cada rota faz duas coisas:
+Cada rota faz duas coisas, na ordem:
 
 | Parte | Responsabilidade |
 | --- | --- |
-| `validarCampos(...)` | Confere se o body tem os campos mínimos |
+| `validarCadastro` / `validarLogin` | Confere se o body tem os campos obrigatórios |
 | `AuthController...` | Executa a ação da rota |
 
 Em `usuario.routes.js`:
@@ -667,15 +667,20 @@ Middlewares são funções que ficam no meio do caminho da requisição.
 
 #### `validarCampos.middleware.js`
 
-```js
-const camposAusentes = camposObrigatorios.filter((campo) => {
-  const valor = req.body?.[campo];
+Exporta duas funções de middleware, uma para cada rota de autenticação:
 
-  return valor === undefined || valor === null || valor === "" || (typeof valor === "string" && valor.trim() === "");
-});
+```js
+export function validarCadastro(req, res, next) {
+  const { nome, email, senha } = req.body;
+  if (!nome)  return next(criarErro("O campo 'nome' é obrigatório.", 400));
+  if (!email) return next(criarErro("O campo 'email' é obrigatório.", 400));
+  if (!senha) return next(criarErro("O campo 'senha' é obrigatório.", 400));
+  return next();
+}
 ```
 
-Esse middleware verifica se a requisição trouxe os campos obrigatórios antes de chegar no controller.
+Cada função confere se o body trouxe os campos obrigatórios antes de a
+requisição chegar no controller. Se faltar algum, encerra com erro 400.
 
 #### `autenticacao.middleware.js`
 

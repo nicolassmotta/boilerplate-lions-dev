@@ -10,8 +10,19 @@ import autenticar from "../middlewares/autenticacao.middleware.js";
 // Criamos o roteador de usuários.
 const router = Router();
 
-// Todas as rotas abaixo desta linha exigem token JWT.
-// Isso evita repetir "autenticar" em cada rota.
+// Existem duas formas de aplicar o middleware "autenticar":
+//
+// 1) De forma GLOBAL, com router.use(autenticar).
+//    Todas as rotas declaradas ABAIXO desta linha passam pelo middleware,
+//    evitando repetir "autenticar" em cada uma. Ideal quando todas as
+//    rotas do arquivo exigem autenticação (como é o caso aqui).
+//
+// 2) De forma INDIVIDUAL, passando o middleware como argumento na rota:
+//       router.get("/perfil", autenticar, UsuarioController.perfil);
+//    Aqui o middleware roda apenas naquela rota específica. Ideal quando
+//    só algumas rotas do arquivo precisam de autenticação.
+//
+// Abaixo usamos a forma global, pois todas as rotas exigem token JWT.
 router.use(autenticar);
 
 // GET /api/usuarios/perfil

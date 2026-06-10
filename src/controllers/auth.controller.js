@@ -1,5 +1,7 @@
 // Controller é a camada que recebe req/res e chama o service.
 // Aqui ficam os endpoints de autenticação: cadastro e login.
+// A validação dos campos obrigatórios já foi feita pelos middlewares
+// (validarCadastro / validarLogin) antes da requisição chegar aqui.
 import AuthService from "../services/auth.service.js";
 
 // Controller do cadastro.

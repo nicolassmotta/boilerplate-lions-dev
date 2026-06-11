@@ -5,7 +5,8 @@ import UsuarioService from "../services/usuario.service.js";
 // Retorna o perfil do usuário logado.
 async function perfil(req, res, next) {
   try {
-    // req.usuario foi criado pelo middleware de autenticação depois de validar o JWT.
+    // req.usuario foi criado pelo middleware de autenticação
+    // depois de validar o JWT.
     const usuario = await UsuarioService.buscarPerfil(req.usuario.id);
 
     // Enviamos o usuário dentro de um objeto para manter o padrão da resposta.
@@ -59,9 +60,11 @@ async function removerMinhaConta(req, res, next) {
 }
 
 // Exportamos as funções para as rotas de usuário.
-export default {
+const UsuarioController = {
   perfil,
   listar,
   atualizarPerfil,
   removerMinhaConta,
 };
+
+export default UsuarioController;

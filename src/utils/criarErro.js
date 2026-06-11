@@ -1,6 +1,6 @@
 // Função auxiliar para criar erros com uma mensagem e um status HTTP.
 // Isso evita repetir várias vezes: const error = new Error(...); error.status = ...
-export default function criarErro(message, status = 500) {
+function criarErro(message, status = 500) {
   // Criamos um erro padrão do JavaScript com a mensagem recebida.
   const error = new Error(message);
 
@@ -10,3 +10,5 @@ export default function criarErro(message, status = 500) {
   // Devolvemos o erro pronto para ser usado com "throw" ou "next(error)".
   return error;
 }
+
+export default criarErro;

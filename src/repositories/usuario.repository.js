@@ -11,10 +11,12 @@ async function criar(dadosDoUsuario) {
 // O parâmetro "incluirSenha" existe porque a senhaHash normalmente fica escondida.
 // No login precisamos dela para comparar com a senha digitada.
 async function buscarPorEmail(email, incluirSenha = false) {
-  // Normalizamos o email para evitar diferenças como "TESTE@email.com" e "teste@email.com".
+  // Normalizamos o email para evitar diferenças como "TESTE@email.com"
+  // e "teste@email.com".
   const query = Usuario.findOne({ email: email.trim().toLowerCase() });
 
-  // Como senhaHash tem select: false no Model, precisamos pedir explicitamente quando necessário.
+  // Como senhaHash tem select: false no Model, precisamos pedir explicitamente
+  // quando necessário.
   if (incluirSenha) {
     query.select("+senhaHash");
   }
@@ -51,7 +53,7 @@ async function deletarPorId(id) {
 }
 
 // Exportamos todas as funções do repository em um objeto.
-export default {
+const UsuarioRepository = {
   criar,
   buscarPorEmail,
   buscarPorId,
@@ -59,3 +61,5 @@ export default {
   atualizarPorId,
   deletarPorId,
 };
+
+export default UsuarioRepository;

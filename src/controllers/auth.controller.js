@@ -33,7 +33,9 @@ async function login(req, res, next) {
 }
 
 // Exportamos as funções para serem usadas nas rotas.
-export default {
+const AuthController = {
   cadastrar,
   login,
 };
+
+export default AuthController;

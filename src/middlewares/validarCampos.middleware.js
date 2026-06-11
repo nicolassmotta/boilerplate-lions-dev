@@ -14,7 +14,7 @@ import criarErro from "../utils/criarErro.js";
 
 // Middleware da rota de CADASTRO.
 // O cadastro precisa de: nome, email e senha.
-export function validarCadastro(req, res, next) {
+function validarCadastro(req, res, next) {
   // Lemos os campos esperados no corpo da requisição.
   const { nome, email, senha } = req.body;
 
@@ -37,7 +37,7 @@ export function validarCadastro(req, res, next) {
 
 // Middleware da rota de LOGIN.
 // O login precisa de: email e senha.
-export function validarLogin(req, res, next) {
+function validarLogin(req, res, next) {
   // Lemos os campos esperados no corpo da requisição.
   const { email, senha } = req.body;
 
@@ -53,3 +53,10 @@ export function validarLogin(req, res, next) {
   // Está tudo certo: liberamos a requisição para seguir ao controller.
   return next();
 }
+
+const validarCampos = {
+  validarCadastro,
+  validarLogin,
+};
+
+export default validarCampos;

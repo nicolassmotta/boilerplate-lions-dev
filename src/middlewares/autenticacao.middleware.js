@@ -21,7 +21,7 @@ import jwt from "jsonwebtoken";
 import criarErro from "../utils/criarErro.js";
 
 // O Express vai executar esta função em cada requisição da rota protegida.
-export default function autenticar(req, res, next) {
+function autenticar(req, res, next) {
   // PASSO 1: pegar o token.
   // Por convenção, o token chega no cabeçalho Authorization.
   // Exemplo: Authorization: Bearer eyJhbGciOi...
@@ -54,15 +54,15 @@ export default function autenticar(req, res, next) {
   // inválido ou está expirado. O catch é quem captura essa falha.
   try {
     // jwt.verify confere a assinatura usando o mesmo JWT_SECRET que gerou o token.
-    // Se estiver tudo certo, ela devolve o "payload" (os dados guardados no token).
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    // Se estiver tudo certo, ela devolve os dados que guardamos dentro do token.
+    const dadosDoToken = jwt.verify(token, process.env.JWT_SECRET);
 
     // PASSO 5: guardar quem está logado dentro da requisição.
     // Assim os próximos controllers conseguem saber quem fez a requisição
     // lendo req.usuario, sem precisar decodificar o token de novo.
     req.usuario = {
-      id: payload.id,
-      email: payload.email,
+      id: dadosDoToken.id,
+      email: dadosDoToken.email,
     };
 
     // Token válido: liberamos a requisição para seguir até a rota/controller.
@@ -73,3 +73,5 @@ export default function autenticar(req, res, next) {
     return next(criarErro("Token inválido ou expirado.", 401));
   }
 }
+
+export default autenticar;

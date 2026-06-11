@@ -40,24 +40,30 @@ function gerarToken(usuario) {
     throw criarErro("JWT_SECRET não configurado no ambiente.", 500);
   }
 
+  // Dados que ficarão guardados dentro do token.
+  // Depois, o middleware de autenticação vai conseguir ler esses dados.
+  const dadosDoToken = {
+    // Guardamos o id para identificar o usuário nas rotas protegidas.
+    id: usuario._id.toString(),
+
+    // Guardamos o email porque pode ser útil para logs ou verificações simples.
+    email: usuario.email,
+  };
+
+  // Configurações extras do token.
+  const opcoesDoToken = {
+    // Tempo de expiração do token. Se não vier do .env, usamos 1 dia.
+    expiresIn: process.env.JWT_EXPIRES_IN || "1d",
+  };
+
   // jwt.sign cria um token assinado.
-  // O primeiro argumento é o payload: dados que queremos guardar dentro do token.
-  return jwt.sign(
-    {
-      // Guardamos o id para identificar o usuário nas rotas protegidas.
-      id: usuario._id.toString(),
-
-      // Guardamos o email porque pode ser útil para logs ou verificações simples.
-      email: usuario.email,
-    },
-
-    // Chave secreta usada para assinar o token.
+  const token = jwt.sign(
+    dadosDoToken,
     process.env.JWT_SECRET,
-    {
-      // Tempo de expiração do token. Se não vier do .env, usamos 1 dia.
-      expiresIn: process.env.JWT_EXPIRES_IN || "1d",
-    }
+    opcoesDoToken
   );
+
+  return token;
 }
 
 // Cadastra um novo usuário.
@@ -136,7 +142,9 @@ async function login({ email, senha }) {
 }
 
 // Exportamos as funções que o controller pode chamar.
-export default {
+const AuthService = {
   cadastrar,
   login,
 };
+
+export default AuthService;

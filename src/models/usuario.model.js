@@ -2,21 +2,25 @@
 import mongoose from "mongoose";
 
 // Schema é o "molde" do documento que será salvo na coleção de usuários.
+// O primeiro objeto define os campos do usuário.
+// O segundo objeto, mais abaixo, define opções extras do Schema.
 const UsuarioSchema = new mongoose.Schema(
   {
     // Nome do usuário.
     // trim remove espaços extras no começo e no fim.
     nome: {
       type: String,
+      // required com array permite definir: [campo obrigatório?, mensagem de erro].
       required: [true, "O nome é obrigatório."],
       trim: true,
+      // minlength também usa [valor mínimo, mensagem de erro].
       minlength: [2, "O nome deve ter pelo menos 2 caracteres."],
     },
 
     // Email do usuário.
     // unique cria uma regra para evitar emails repetidos.
     // lowercase salva o email em minúsculo.
-    // match valida um formato simples de email.
+    // match valida um formato simples de email usando expressão regular.
     email: {
       type: String,
       required: [true, "O email é obrigatório."],
@@ -43,6 +47,8 @@ const UsuarioSchema = new mongoose.Schema(
     // Aqui removemos campos que não devem aparecer na resposta da API.
     toJSON: {
       transform(document, retorno) {
+        // document é o documento original do Mongoose.
+        // retorno é o objeto que será enviado como JSON.
         // Mesmo se senhaHash aparecer em alguma consulta específica,
         // removemos antes de enviar a resposta para o cliente.
         delete retorno.senhaHash;

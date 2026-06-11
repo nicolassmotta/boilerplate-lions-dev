@@ -12,6 +12,7 @@ dotenv.config();
 
 // No Render, a porta vem de process.env.PORT.
 // No computador local, se não houver PORT, usamos 3000.
+// process.env sempre guarda valores como texto, por isso usamos fallback simples aqui.
 const PORT = process.env.PORT || 3000;
 
 try {

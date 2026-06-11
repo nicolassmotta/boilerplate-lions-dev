@@ -13,6 +13,7 @@ function montarUsuarioSeguro(usuario) {
   const usuarioSeguro = usuario.toObject();
 
   // Garante que a senhaHash nunca será devolvida na resposta.
+  // delete remove uma propriedade do objeto em memória; não apaga o campo no banco.
   delete usuarioSeguro.senhaHash;
 
   // Remove o campo interno do Mongoose.
@@ -58,6 +59,10 @@ async function listarUsuarios() {
 
 // Atualiza o perfil do usuário logado.
 async function atualizarPerfil(idDoUsuario, dados = {}) {
+  // dados = {} é um valor padrão.
+  // Se alguém chamar a função sem enviar dados, ela usa um objeto vazio
+  // e evita erro ao acessar dados.nome ou dados.senha.
+
   // Montamos um objeto apenas com os campos permitidos.
   // Assim evitamos atualizar campos que o usuário não deveria controlar.
   const dadosAtualizados = {};
@@ -72,6 +77,7 @@ async function atualizarPerfil(idDoUsuario, dados = {}) {
     validarSenha(dados.senha);
 
     // Pegamos o custo do bcrypt do .env ou usamos 10 como padrão.
+    // Number(...) converte o valor do .env, que chega como texto, para número.
     const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 10);
 
     // A senha pura nunca vai para o banco.

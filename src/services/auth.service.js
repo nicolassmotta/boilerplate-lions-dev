@@ -24,6 +24,7 @@ function montarUsuarioSeguro(usuario) {
   const usuarioSeguro = usuario.toObject();
 
   // Garantia extra: nunca devolvemos senhaHash para o cliente.
+  // delete remove uma propriedade do objeto em memória; não apaga o campo no banco.
   delete usuarioSeguro.senhaHash;
 
   // Removemos o campo interno do Mongoose para deixar a resposta mais limpa.
@@ -57,6 +58,7 @@ function gerarToken(usuario) {
   };
 
   // jwt.sign cria um token assinado.
+  // Ele recebe: dados que entram no token, segredo usado para assinar e opções.
   const token = jwt.sign(
     dadosDoToken,
     process.env.JWT_SECRET,
@@ -89,6 +91,7 @@ async function cadastrar({ nome, email, senha }) {
 
   // Quantidade de rodadas do bcrypt.
   // Quanto maior, mais pesado fica gerar o hash.
+  // Number(...) converte o valor do .env, que chega como texto, para número.
   const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 10);
 
   // Aqui a senha pura vira hash.

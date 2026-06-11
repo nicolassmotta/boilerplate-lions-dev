@@ -41,6 +41,8 @@ function autenticar(req, res, next) {
 
   // PASSO 3: conferir o formato.
   // O cabeçalho tem duas partes separadas por espaço: "Bearer" e o token.
+  // split(" ") quebra o texto em um array usando espaço como separador.
+  // Ex.: "Bearer abc123".split(" ") => ["Bearer", "abc123"]
   // Ao desestruturar, tipo = "Bearer" e token = "eyJ..."
   const [tipo, token] = authHeader.split(" ");
 

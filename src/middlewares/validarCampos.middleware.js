@@ -16,6 +16,8 @@ import criarErro from "../utils/criarErro.js";
 // O cadastro precisa de: nome, email e senha.
 function validarCadastro(req, res, next) {
   // Lemos os campos esperados no corpo da requisição.
+  // A sintaxe abaixo é desestruturação: ela tira nome, email e senha de req.body.
+  // É equivalente a fazer: const nome = req.body.nome; etc.
   const { nome, email, senha } = req.body;
 
   // Conferimos um campo de cada vez, de cima para baixo.
@@ -39,6 +41,7 @@ function validarCadastro(req, res, next) {
 // O login precisa de: email e senha.
 function validarLogin(req, res, next) {
   // Lemos os campos esperados no corpo da requisição.
+  // Aqui usamos desestruturação para pegar apenas email e senha do body.
   const { email, senha } = req.body;
 
   // Conferimos um campo de cada vez.

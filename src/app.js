@@ -19,6 +19,7 @@ import criarErro from "./utils/criarErro.js";
 const app = express();
 
 // Middleware nativo do Express para ler JSON no corpo das requisições.
+// Sem isso, req.body viria vazio em requisições com JSON.
 app.use(express.json());
 
 // Rota inicial apenas para testar se a API está rodando.
@@ -27,6 +28,8 @@ app.get("/", (req, res) => {
 });
 
 // Todas as rotas de autenticação começam com /api/auth.
+// app.use com caminho monta um grupo de rotas dentro daquele prefixo.
+// Ex.: authRoutes tem "/login", então a URL final vira "/api/auth/login".
 app.use("/api/auth", authRoutes);
 
 // Todas as rotas de usuário começam com /api/usuarios.

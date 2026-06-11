@@ -8,6 +8,8 @@ function erroMiddleware(error, req, res, next) {
     // O .map percorre esse array, um erro por vez, e pega apenas erro.message.
     // No final, mensagens será um novo array contendo só os textos dos erros.
     const mensagens = Object.values(error.errors).map((erro) => erro.message);
+
+    // join(" ") junta o array de mensagens em uma única string, separando por espaço.
     return res.status(400).json({ message: mensagens.join(" ") });
   }
 

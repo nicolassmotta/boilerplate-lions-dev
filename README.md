@@ -727,6 +727,14 @@ return res.status(status).json({ message });
 
 Esse middleware centraliza as respostas de erro. Assim os controllers não precisam repetir `res.status(...).json(...)` para cada falha.
 
+Antes desse trecho, ele trata três erros do Mongoose e do MongoDB:
+
+| Erro | Quando acontece | Resposta |
+| ---- | --------------- | -------- |
+| `ValidationError` | campo obrigatório faltando ou valor fora das regras do Schema | `400` com as mensagens do Schema |
+| `CastError` | id em formato inválido | `400` com `ID inválido.` |
+| código `11000` | valor repetido em um campo `unique` | `409`; para `email`, `Email já cadastrado.`; para outros campos, uma mensagem com o nome do campo |
+
 ### `src/utils/criarErro.js`
 
 ```js

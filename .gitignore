@@ -1,5 +1,15 @@
 node_modules/
 .env
+**/.env.*
+!**/.env.example
+dist/
+coverage/
 npm-debug.log*
 .vscode/
+.agents/
+.codex/
 .claude/
+.cursor/
+.gemini/
+.opencode/
+.windsurf/

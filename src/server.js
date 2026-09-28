@@ -7,8 +7,10 @@ import app from "./app.js";
 // Função que conecta no MongoDB.
 import conectarBanco from "./config/database.js";
 
-// Carrega o arquivo .env.
-dotenv.config({path: "../.env"});
+// Carrega o arquivo .env da pasta onde o "npm start" é executado (a raiz do projeto).
+// Não use { path: "../.env" }: esse caminho é resolvido a partir da pasta do terminal,
+// e não da pasta deste arquivo, então o .env da raiz não seria encontrado.
+dotenv.config();
 
 // No Render, a porta vem de process.env.PORT.
 // No computador local, se não houver PORT, usamos 3000.

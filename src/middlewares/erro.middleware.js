@@ -18,10 +18,20 @@ function erroMiddleware(error, req, res, next) {
     return res.status(400).json({ message: "ID inválido." });
   }
 
-  // Código 11000 é erro de duplicidade no MongoDB.
-  // Aqui usamos para email já cadastrado.
+  // Código 11000 é erro de duplicidade no MongoDB: um campo com unique: true
+  // recebeu um valor que já existe em outro documento.
   if (error.code === 11000) {
-    return res.status(409).json({ message: "Email já cadastrado." });
+    // keyValue diz qual campo repetiu. Ex.: { email: "ana@email.com" }
+    // Object.keys(...) pega os nomes dos campos; [0] pega o primeiro.
+    const campo = Object.keys(error.keyValue || {})[0];
+
+    if (campo === "email") {
+      return res.status(409).json({ message: "Email já cadastrado." });
+    }
+
+    // Outros campos únicos que você criar (cpf, codigo, placa...) recebem
+    // uma mensagem com o nome do campo, em vez de falar em email.
+    return res.status(409).json({ message: `Já existe um registro com este valor de '${campo}'.` });
   }
 
   // Se o erro veio do nosso criarErro, ele terá status.

@@ -18,7 +18,9 @@ function validarCadastro(req, res, next) {
   // Lemos os campos esperados no corpo da requisição.
   // A sintaxe abaixo é desestruturação: ela tira nome, email e senha de req.body.
   // É equivalente a fazer: const nome = req.body.nome; etc.
-  const { nome, email, senha } = req.body;
+  // No Express 5, uma requisição sem body deixa req.body como undefined.
+  // O ?? {} evita o TypeError (que virava erro 500) e deixa a validação responder 400.
+  const { nome, email, senha } = req.body ?? {};
 
   // Conferimos um campo de cada vez, de cima para baixo.
   if (!nome) {
@@ -42,7 +44,8 @@ function validarCadastro(req, res, next) {
 function validarLogin(req, res, next) {
   // Lemos os campos esperados no corpo da requisição.
   // Aqui usamos desestruturação para pegar apenas email e senha do body.
-  const { email, senha } = req.body;
+  // Mesmo cuidado do cadastro: sem body, usa um objeto vazio.
+  const { email, senha } = req.body ?? {};
 
   // Conferimos um campo de cada vez.
   if (!email) {
